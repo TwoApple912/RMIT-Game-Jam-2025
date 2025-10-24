@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class MovingPlatform : MonoBehaviour
 {
     [Header("Parameters")]
@@ -21,31 +20,40 @@ public class MovingPlatform : MonoBehaviour
     public AnimationCurve curveAToB = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     public AnimationCurve curveBToA = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    private float progress = 0;
+    private float progress = 0f;
     private bool movingToB = true;
     private float pauseTimer = 0f;
     private bool isPaused = false;
 
-    void Update()
+    [Header("References")]
+    public Rigidbody2D rb;
+
+    private void Awake()
+    {
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+    }
+
+    private void FixedUpdate()
     {
         if (enableMovement) MovePlatform();
     }
 
-    void MovePlatform()
+    private void MovePlatform()
     {
         // Handle pause at endpoints
         if (isPaused)
         {
-            pauseTimer -= Time.deltaTime;
-            if (pauseTimer <= 0f)
-            {
-                isPaused = false;
-            }
+            pauseTimer -= Time.fixedDeltaTime;
+            if (pauseTimer <= 0f) isPaused = false;
             return;
         }
 
         float currentTime = movingToB ? timeAToB : timeBToA;
-        float step = (1f / currentTime) * Time.deltaTime;
+        if (currentTime <= 0f) return;
+
+        float step = (1f / currentTime) * Time.fixedDeltaTime;
         progress += movingToB ? step : -step;
 
         if (progress >= 1f)
@@ -70,7 +78,11 @@ public class MovingPlatform : MonoBehaviour
         }
 
         // Evaluate the appropriate curve based on direction
-        float easedProgress = movingToB ? curveAToB.Evaluate(progress) : curveBToA.Evaluate(1f - progress);
-        transform.position = Vector3.Lerp(pointA, pointB, easedProgress);
+        float easedProgress = movingToB
+            ? curveAToB.Evaluate(progress)
+            : curveBToA.Evaluate(1f - progress);
+
+        Vector3 targetPos3 = Vector3.Lerp(pointA, pointB, easedProgress);
+        rb.MovePosition((Vector2)targetPos3);
     }
 }

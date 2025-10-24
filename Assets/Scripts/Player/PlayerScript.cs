@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -8,6 +7,7 @@ public class PlayerScript : MonoBehaviour
     public float runSpeed = 40f;
     [Space]
     public float pickedObjectPullStrength = 20f;
+    public float throwForce = 12f;
 
     private float horizontalMove = 0f;
     private bool jumpPressed = false;
@@ -59,6 +59,11 @@ public class PlayerScript : MonoBehaviour
                 PickUpNearestItem();
                 Debug.Log("picked up");
             }
+        }
+
+        if (Input.GetMouseButtonDown(0) && isHoldingItem)
+        {
+            ThrowHeldItem();
         }
     }
 
@@ -167,4 +172,29 @@ public class PlayerScript : MonoBehaviour
     }
 
     #endregion
+
+    void ThrowHeldItem()
+    {
+        if (currentHeldItem == null) return;
+
+        PickupObject thrown = currentHeldItem;
+        
+        thrown.Dropped(gameObject);
+        
+        currentHeldItem = null;
+        isHoldingItem = false;
+        
+        Camera cam = Camera.main;
+        Vector3 throwDir = (holdAnchor.position - transform.position).normalized;
+        
+        var rb2d = thrown.GetComponent<Rigidbody2D>();
+        if (rb2d != null)
+        {
+            Vector2 force = new Vector2(throwDir.x, throwDir.y) * throwForce;
+            rb2d.AddForce(force, ForceMode2D.Impulse);
+            return;
+        }
+        
+        thrown.transform.position = thrown.transform.position + throwDir * 0.5f;
+    }
 }

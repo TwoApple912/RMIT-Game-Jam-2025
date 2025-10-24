@@ -8,12 +8,12 @@ public class CrushChecker : MonoBehaviour
     public LayerMask crushableLayers;
     
     [Header("Position Search")]
-    public Vector2 boxCastSize = new Vector2(0.9f, 1.4f);
-    public float searchStepDistance = 0.5f;
-    public int maxSearchSteps = 5;
+    public Vector2 boxCastSize = new Vector2(1f, 1f);
+    public float searchStepDistance = 0.25f;
+    public int maxSearchSteps = 10;
     
     [Header("Move Parameters")]
-    public float minWallDistance = 0.3f;
+    public float minWallDistance = 0.25f;
     public float glitchDuration = 0.2f;
 
     private void Update()
