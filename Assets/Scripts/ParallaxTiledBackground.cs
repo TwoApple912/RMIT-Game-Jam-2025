@@ -56,12 +56,19 @@ public class ParallaxTiledBackground : MonoBehaviour
     void OnValidate()
     {
         if (!targetCamera) targetCamera = Camera.main;
+#if UNITY_EDITOR
+        // Never rebuild when this component is shown from a Prefab Asset in the Project browser
+        if (IsEditingPrefabAsset()) return;
+#endif
         if (autoRebuild && Application.isPlaying) RebuildIfNeeded(force:true);
     }
 
     void TryInit()
     {
         if (sourceTile == null || targetCamera == null) return;
+
+        // Avoid mutating Prefab Assets in the Project view (allowed in Prefab Mode and at runtime)
+        if (IsEditingPrefabAsset()) return;
 
         initialWorldAnchor = transform.position;
         BuildGrid();
@@ -109,6 +116,9 @@ public class ParallaxTiledBackground : MonoBehaviour
     void BuildGrid()
     {
         if (sourceTile == null || targetCamera == null) return;
+
+        // Avoid mutating Prefab Assets in the Project view (allowed in Prefab Mode and at runtime)
+        if (IsEditingPrefabAsset()) return;
 
         // Compute tile size in world units (uses the source tile’s current transform scale)
         tileSize = GetTileSize();
@@ -252,4 +262,19 @@ public class ParallaxTiledBackground : MonoBehaviour
             t.position = p;
         }
     }
+
+#if UNITY_EDITOR
+    // Returns true when this component resides in a Prefab Asset in the Project (not an instance in a Scene).
+    // We skip grid building in that case to avoid "Setting the parent of a transform which resides in a Prefab Asset" errors.
+    bool IsEditingPrefabAsset()
+    {
+        // Allow Prefab Mode (isolated editing scene) as it supports hierarchy changes safely.
+        var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(gameObject);
+        if (prefabStage != null) return false;
+        // If the object is part of a Prefab Asset in the Project window, do NOT edit hierarchy
+        return UnityEditor.PrefabUtility.IsPartOfPrefabAsset(gameObject);
+    }
+#else
+    bool IsEditingPrefabAsset() => false;
+#endif
 }
