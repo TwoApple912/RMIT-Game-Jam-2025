@@ -285,11 +285,13 @@ public class PlayerScript : MonoBehaviour
     {
         allowInput = false;
         horizontalMove = 0f;
-        rb.bodyType = RigidbodyType2D.Kinematic;
         rb.velocity = Vector2.zero;
         DropHeldItem();
         
+        animator.SetTrigger("dieTrigger");
         animator.SetBool("died", true);
+
+        StartCoroutine(DeadthCoroutine());
     }
     
     IEnumerator DeadthCoroutine()
