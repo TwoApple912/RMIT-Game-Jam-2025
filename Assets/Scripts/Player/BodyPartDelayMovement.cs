@@ -42,9 +42,29 @@ public class BodyPartDelayMovement : MonoBehaviour
     Vector3 _initialOffset;
     bool    _initialized;
 
+    [Header("Parent Independence")]
+    [Tooltip("If true, detaches from parent on Awake while preserving world transform.")]
+    public bool detachFromParent = true;
+
+    Rigidbody2D _rb2D;
+    Rigidbody   _rb;
+
     void Awake()
     {
-        if (target == null) target = transform.parent;
+        // Cache current parent first
+        Transform prevParent = transform.parent;
+
+        // If no explicit target, default to the current parent (before detaching)
+        if (target == null) target = prevParent;
+
+        // Detach to move independently while preserving world transform
+        if (detachFromParent && prevParent != null)
+        {
+            transform.SetParent(null, true); // keep world-space P/R/S
+        }
+
+        TryGetComponent(out _rb2D);
+        if (_rb2D == null) TryGetComponent(out _rb);
     }
 
     void OnEnable()
@@ -63,38 +83,87 @@ public class BodyPartDelayMovement : MonoBehaviour
         _initialized = true;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (target == null) return;
         if (!_initialized) InitializeOffset();
 
-        float dt = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        float dt = useUnscaledTime ? Time.fixedUnscaledDeltaTime : Time.fixedDeltaTime;
 
         // --- POSITION ---
         Vector3 desired = target.position + _initialOffset + (Vector3)extraOffset;
 
-        // Constrain axes by overriding desired to current on locked axes
-        Vector3 current = transform.position;
+        // Use physics positions when available
+        Vector3 current;
+        if (_rb2D != null)
+        {
+            Vector2 p = _rb2D.position;
+            current = new Vector3(p.x, p.y, transform.position.z);
+        }
+        else if (_rb != null)
+        {
+            current = _rb.position;
+        }
+        else
+        {
+            current = transform.position;
+        }
+
+        // Constrain axes
         if (!followX) desired.x = current.x;
         if (!followY) desired.y = current.y;
         desired.z = current.z; // keep original Z for 2D
 
         // SmoothDamp uses "smoothTime" which is our delaySeconds
-        transform.position = Vector3.SmoothDamp(
+        Vector3 smoothed = Vector3.SmoothDamp(
             current, desired, ref _vel, delaySeconds, maxSpeed, dt
         );
+
+        // Apply via Rigidbody MovePosition
+        if (_rb2D != null)
+        {
+            _rb2D.MovePosition((Vector2)smoothed);
+        }
+        else if (_rb != null)
+        {
+            _rb.MovePosition(smoothed);
+        }
+        else
+        {
+            // Fallback if no rigidbody present
+            transform.position = smoothed;
+        }
 
         // --- ROTATION (optional) ---
         if (followRotation)
         {
-            float currentZ = transform.eulerAngles.z;
+            float currentZ;
+            if (_rb2D != null)
+                currentZ = _rb2D.rotation;
+            else if (_rb != null)
+                currentZ = _rb.rotation.eulerAngles.z;
+            else
+                currentZ = transform.eulerAngles.z;
+
             float desiredZ = target.eulerAngles.z;
             float smoothedZ = Mathf.SmoothDampAngle(
                 currentZ, desiredZ, ref _angVel, rotationDelaySeconds, rotationMaxSpeed, dt
             );
-            var e = transform.eulerAngles;
-            e.z = smoothedZ;
-            transform.eulerAngles = e;
+
+            if (_rb2D != null)
+            {
+                _rb2D.MoveRotation(smoothedZ);
+            }
+            else if (_rb != null)
+            {
+                _rb.MoveRotation(Quaternion.Euler(0f, 0f, smoothedZ));
+            }
+            else
+            {
+                var e = transform.eulerAngles;
+                e.z = smoothedZ;
+                transform.eulerAngles = e;
+            }
         }
     }
 
