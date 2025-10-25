@@ -1,10 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class PlayerScript : MonoBehaviour
 {
-    [FormerlySerializedAs("runSpeed")] [Header("Parameters")]
+    [Header("Parameters")]
+    public bool allowInput = true;
+    [Space]
     public float walkSpeed = 40f;
     [Space]
     public float pickedObjectPullStrength = 20f;
@@ -61,6 +65,8 @@ public class PlayerScript : MonoBehaviour
 
     void TakeInput()
     {
+        if (!allowInput) return;
+        
         // Move
         horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
         // crouch = Input.GetKey(KeyCode.LeftControl);
@@ -277,6 +283,18 @@ public class PlayerScript : MonoBehaviour
 
     public void Die()
     {
+        allowInput = false;
+        horizontalMove = 0f;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.velocity = Vector2.zero;
+        DropHeldItem();
+        
         animator.SetBool("died", true);
+    }
+    
+    IEnumerator DeadthCoroutine()
+    {
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

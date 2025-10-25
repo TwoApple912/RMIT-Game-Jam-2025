@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class Door : Receiver
+public class Door : Receiver, IAffectByCustomTime
 {
+    public float TimeMultiplier { get; set; } = 1;
+    
     [Header("Parameters")]
     public Vector3 closedPosition;
     public Vector3 closedRotation;
@@ -34,7 +36,7 @@ public class Door : Receiver
 
     private void FixedUpdate()
     {
-        if (isMoving)
+        if (isMoving && TimeMultiplier != 0)
         {
             moveProgress += Time.fixedDeltaTime / moveDuration;
 
