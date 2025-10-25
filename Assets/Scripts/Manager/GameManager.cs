@@ -2,10 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public string nextSceneName;
+    
     [Header("Pause")]
     public bool isPaused = false;
     [Space]
@@ -21,21 +23,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Collect all IAffectByCustomTime instances (including inactive) and avoid duplicates
-        timeAffectedObjects.Clear();
-        var set = new HashSet<IAffectByCustomTime>();
-        foreach (var mb in FindObjectsOfType<MonoBehaviour>(true))
-        {
-            if (mb is IAffectByCustomTime t && t != null)
-                set.Add(t);
-        }
-        timeAffectedObjects.AddRange(set);
-        
-        SetCustomTime(1f);
+        UpdateNextSceneNameFromCurrentScene();
+        TimeManagerSetup();
     }
 
     private void Update()
     {
+        // Pause
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
@@ -97,6 +91,21 @@ public class GameManager : MonoBehaviour
 
     #region Time Manager
 
+    void TimeManagerSetup()
+    {
+        // Collect all IAffectByCustomTime instances (including inactive) and avoid duplicates
+        timeAffectedObjects.Clear();
+        var set = new HashSet<IAffectByCustomTime>();
+        foreach (var mb in FindObjectsOfType<MonoBehaviour>(true))
+        {
+            if (mb is IAffectByCustomTime t && t != null)
+                set.Add(t);
+        }
+        timeAffectedObjects.AddRange(set);
+        
+        SetCustomTime(1f);
+    }
+
     public void SetCustomTime(float multiplier)
     {
         foreach (var obj in timeAffectedObjects)
@@ -106,6 +115,31 @@ public class GameManager : MonoBehaviour
                 obj.TimeMultiplier = multiplier;
             }
         }
+    }
+
+    #endregion
+
+    #region Scene Manager
+    
+    private void UpdateNextSceneNameFromCurrentScene()
+    {
+        if (nextSceneName != string.Empty) return;
+        
+        const string prefix = "Level_";
+        string currentName = SceneManager.GetActiveScene().name;
+
+        if (currentName.StartsWith(prefix))
+        {
+            string indexPart = currentName.Substring(prefix.Length);
+            if (int.TryParse(indexPart, out int index))
+            {
+                nextSceneName = $"{prefix}{index + 1}";
+                return;
+            }
+        }
+
+        // Fallback if the name doesn't match the expected format
+        nextSceneName = string.Empty;
     }
 
     #endregion
