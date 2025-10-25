@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         }
         timeAffectedObjects.AddRange(set);
         
-        SetCustomTime(1f);
+        //SetCustomTime(1f);
     }
 
     public void SetCustomTime(float multiplier)
@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
     private void UpdateNextSceneNameFromCurrentScene()
     {
         if (nextSceneName != string.Empty) return;
+        Debug.Log("Updating next scene name from current scene.");
         
         const string prefix = "Level_";
         string currentName = SceneManager.GetActiveScene().name;
@@ -134,12 +135,8 @@ public class GameManager : MonoBehaviour
             if (int.TryParse(indexPart, out int index))
             {
                 nextSceneName = $"{prefix}{index + 1}";
-                return;
             }
         }
-
-        // Fallback if the name doesn't match the expected format
-        nextSceneName = string.Empty;
     }
 
     #endregion

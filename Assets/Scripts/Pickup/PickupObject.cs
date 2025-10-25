@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class PickupObject : MonoBehaviour, IAffectByCustomTime
 {
-    public float TimeMultiplier { get; set; }
+    public float TimeMultiplier { get; set; } = 1f;
     
     [Header("Parameters")]
     public LayerMask pickUpLayer;
@@ -51,16 +51,16 @@ public abstract class PickupObject : MonoBehaviour, IAffectByCustomTime
                     
                     hasRun1 = true;
                     hasRun2 = false;
+                    
+                    rb.bodyType = RigidbodyType2D.Kinematic;
                 }
-
-                rb.bodyType = RigidbodyType2D.Kinematic;
             }
             else if (TimeMultiplier == 1f)
             {
-                rb.bodyType = RigidbodyType2D.Dynamic;
-
                 if (!hasRun2 && hasRun1)
                 {
+                    rb.bodyType = RigidbodyType2D.Dynamic;
+                    
                     rb.velocity = lastVelocity;
                     rb.angularVelocity = lastAngularVelocity;
                     
@@ -68,12 +68,12 @@ public abstract class PickupObject : MonoBehaviour, IAffectByCustomTime
                     hasRun1 = false;
                 }
             }
-            else
+            /*else
             {
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 rb.velocity *= TimeMultiplier;
                 rb.angularVelocity *= TimeMultiplier;
-            }
+            }*/
         }
     }
 

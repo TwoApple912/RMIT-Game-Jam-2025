@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def76d242d8c194284b8f3d60c4a3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextSceneName: 
   isPaused: 0
   gradientFadeDuration: 0.5
   pauseGradient: {fileID: 0}

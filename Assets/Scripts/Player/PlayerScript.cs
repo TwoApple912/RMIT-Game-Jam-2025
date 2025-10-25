@@ -23,6 +23,7 @@ public class PlayerScript : MonoBehaviour
     
     [Header("References")]
     public CharacterController2D controller;
+    public CapsuleCollider2D collider2D;
     [Space]
     public Transform holdAnchor;
     [Space]
@@ -31,6 +32,7 @@ public class PlayerScript : MonoBehaviour
     void Awake()
     {
         if (controller == null) controller = GetComponent<CharacterController2D>();
+        if (collider2D == null) collider2D = GetComponent<CapsuleCollider2D>();
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
     }
     
@@ -200,7 +202,7 @@ public class PlayerScript : MonoBehaviour
         isHoldingItem = false;
         
         Camera cam = Camera.main;
-        Vector3 throwDir = (holdAnchor.position - transform.position).normalized;
+        Vector3 throwDir = (holdAnchor.position - collider2D.bounds.center).normalized;
         
         var rb2d = thrown.GetComponent<Rigidbody2D>();
         if (rb2d != null)

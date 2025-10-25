@@ -791,14 +791,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7527272176049984340, guid: 974e163ae78679945b9767745c19d2de, type: 3}
-      propertyPath: m_Follow
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7527272176049984340, guid: 974e163ae78679945b9767745c19d2de, type: 3}
-      propertyPath: m_Lens.OrthographicSize
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 8787698157916082140, guid: 974e163ae78679945b9767745c19d2de, type: 3}
       propertyPath: m_Name
       value: Virtual Camera
@@ -912,10 +904,6 @@ PrefabInstance:
     - target: {fileID: 65229378379018285, guid: 37fb0088e81839140bc0f33fcac16732, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 173345346783179182, guid: 37fb0088e81839140bc0f33fcac16732, type: 3}
-      propertyPath: orthographic size
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7032526101420416194, guid: 37fb0088e81839140bc0f33fcac16732, type: 3}
       propertyPath: m_Name
