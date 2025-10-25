@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -17,14 +16,21 @@ public class GameManager : MonoBehaviour
     public List<IAffectByCustomTime> timeAffectedObjects = new List<IAffectByCustomTime>();
 
     [Header("References")]
-    public Image pauseGradient;
+    // CanvasGroup representing the pause screen UI (e.g., a panel with your pause menu)
+    public CanvasGroup pauseScreen;
 
-    private Coroutine timescaleTransitionCoroutine;
+    private Coroutine _uiFadeCoroutine;
+
+    private void Awake()
+    {
+        if (pauseScreen == null) pauseScreen = GameObject.Find("Canvas/Pause Screen")?.GetComponent<CanvasGroup>();
+    }
 
     private void Start()
     {
         UpdateNextSceneNameFromCurrentScene();
         TimeManagerSetup();
+        InitializePauseUIState();
     }
 
     private void Update()
@@ -37,54 +43,135 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region Pause
+    #region Pause, Restart & Exit
 
-    void Pause(bool pause = true)
+    public void Pause(bool pause = true)
     {
-        // Stop any existing timescale transition
-        if (timescaleTransitionCoroutine != null)
-        {
-            StopCoroutine(timescaleTransitionCoroutine);
-        }
-
+        // Update UI and time when pausing/unpausing
         if (pause)
         {
-            LerpPauseGradientAlpha(1);
+            ShowPauseUI(true);
             SetCustomTime(0f);
         }
         else
         {
-            LerpPauseGradientAlpha(0);
+            ShowPauseUI(false);
             SetCustomTime(1f);
         }
     }
 
-    public void LerpPauseGradientAlpha(float targetAlpha)
+    // Convenience for UI buttons
+    public void Resume()
     {
-        if (pauseGradient != null) StartCoroutine(LerpPauseGradientAlphaCoroutine(targetAlpha));
+        isPaused = false;
+        Pause(false);
     }
 
-    private IEnumerator LerpPauseGradientAlphaCoroutine(float targetAlpha)
+    // Ensure initial visibility of the pause UI matches the isPaused flag
+    private void InitializePauseUIState()
     {
-        if (pauseGradient == null) yield break;
+        if (pauseScreen == null) return;
 
-        Color startColor = pauseGradient.color;
-        float startAlpha = startColor.a;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < gradientFadeDuration)
+        // If starting paused, show immediately without fade; otherwise hide and deactivate
+        if (isPaused)
         {
-            elapsedTime += Time.unscaledDeltaTime; // Use unscaledDeltaTime to work even when paused
-            float t = elapsedTime / gradientFadeDuration;
-            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-            
-            pauseGradient.color = new Color(startColor.r, startColor.g, startColor.b, newAlpha);
-            
-            yield return null;
+            SetCanvasGroupImmediate(pauseScreen, 1f, interactable: true, blocksRaycasts: true);
+            if (!pauseScreen.gameObject.activeSelf) pauseScreen.gameObject.SetActive(true);
+        }
+        else
+        {
+            SetCanvasGroupImmediate(pauseScreen, 0f, interactable: false, blocksRaycasts: false);
+            if (pauseScreen.gameObject.activeSelf) pauseScreen.gameObject.SetActive(false);
+        }
+    }
+
+    // Public entry to show/hide the pause UI with fade
+    public void ShowPauseUI(bool show)
+    {
+        if (pauseScreen == null)
+            return;
+
+        // Stop any existing fade
+        if (_uiFadeCoroutine != null)
+        {
+            StopCoroutine(_uiFadeCoroutine);
+            _uiFadeCoroutine = null;
         }
 
-        // Ensure we reach the exact target alpha
-        pauseGradient.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+        // Ensure active before fade in
+        if (show && !pauseScreen.gameObject.activeSelf)
+        {
+            pauseScreen.gameObject.SetActive(true);
+        }
+
+        // Set interactability up front when showing; defer disabling until fade-out completes when hiding
+        if (show)
+        {
+            pauseScreen.interactable = true;
+            pauseScreen.blocksRaycasts = true;
+        }
+
+        _uiFadeCoroutine = StartCoroutine(FadeCanvasGroupCoroutine(pauseScreen, show ? 1f : 0f, gradientFadeDuration, disableOnComplete: !show));
+    }
+
+    private void SetCanvasGroupImmediate(CanvasGroup cg, float alpha, bool interactable, bool blocksRaycasts)
+    {
+        cg.alpha = alpha;
+        cg.interactable = interactable;
+        cg.blocksRaycasts = blocksRaycasts;
+    }
+
+    private IEnumerator FadeCanvasGroupCoroutine(CanvasGroup cg, float targetAlpha, float duration, bool disableOnComplete)
+    {
+        if (cg == null)
+            yield break;
+
+        float startAlpha = cg.alpha;
+        float elapsed = 0f;
+        duration = Mathf.Max(0f, duration);
+
+        if (duration <= 0f)
+        {
+            cg.alpha = targetAlpha;
+        }
+        else
+        {
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime; // unscaled to work while paused
+                float t = Mathf.Clamp01(elapsed / duration);
+                cg.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+                yield return null;
+            }
+            cg.alpha = targetAlpha;
+        }
+
+        if (Mathf.Approximately(targetAlpha, 0f))
+        {
+            // After hiding, disable interaction and optionally the GameObject
+            cg.interactable = false;
+            cg.blocksRaycasts = false;
+            if (disableOnComplete)
+            {
+                cg.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            // After showing, ensure it's interactable
+            cg.interactable = true;
+            cg.blocksRaycasts = true;
+        }
+
+        _uiFadeCoroutine = null;
+    }
+
+    public void RestartLevel()
+    {
+        if (SceneManager.GetActiveScene() != null)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     #endregion
