@@ -214,9 +214,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activated: 0
-  closedPosition: {x: 11.06, y: -9.491551, z: 0}
+  closedPosition: {x: 11.06, y: -9.11, z: 0}
   closedRotation: {x: 0, y: 0, z: -270}
-  openPosition: {x: 11.06, y: -9.491551, z: 0}
+  openPosition: {x: 11.06, y: -9.11, z: 0}
   openRotation: {x: 0, y: 0, z: -420.69}
   moveDuration: 0.1
   easeCurve:
@@ -1136,9 +1136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activated: 0
-  closedPosition: {x: 17.93, y: -9.639, z: 54.238}
+  closedPosition: {x: 17.93, y: -9.257448, z: 54.238}
   closedRotation: {x: 0, y: 0, z: -90}
-  openPosition: {x: 17.93, y: -9.639, z: 0}
+  openPosition: {x: 17.93, y: -9.257448, z: 0}
   openRotation: {x: 0, y: 0, z: 54.238}
   moveDuration: 0.1
   easeCurve:
