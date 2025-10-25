@@ -1,17 +1,239 @@
-﻿title: Intro
+﻿title: Setup
+---
+<<declare $hasYapped = false>>
+
+===
+
+
+
+
+
+title: Level2_Intro
 ---
 <<UIStart>>
-NPC: Welcome to <shake a=0.5>the debugging tutorial!</shake> In this section, 
-<<wait  3>>
-NPC: we will guide you through the basics of debugging your code effectively. Let's get started!
-<<wait  4>>
-NPC: Debugging is an essential skill for any developer./n It involves identifying, analyzing, and fixing bugs or issues in your code.
-<<wait  5>>
+NPC:
+<<wait 1>>
+NPC: Wtf? Why is there's one person online here?
+<<wait 2>>
+NPC: Hey. You.
+<<wait 1.5>>
+NPC: <Shake a=0.5> YOU </Shake> there.
+<<wait 2>>
+NPC: <Shake  a=0.5>HOW DID YOU GET HERE?</Shake>
+<<wait 2>>
+NPC: <Shake a-0.5>QUIT THE GAME!</Shake>
+<<wait 2>>
 <<UIStop>>
 ===
 
-title: Ass
+title: Level3
 ---
-NPC: so ass
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: <shake a=0.5>WHAT...</Shake>
+<<wait 1>>
+NPC: Still here?
+<<wait 2>>
+NPC: Well. Ok let's see how far you can go.
+<<wait 2>>
+<<UIStop>>
+<<wait 10>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Jumping here...Jumping there...
+<<wait 2>>
+NPC: Man...This is getting boring.
+<<wait 2>>
+===
+
+title: Level4
+---
+<<UIStart>>
+NPC:
+<<wait 0.4>>
+NPC: That was close.
+<<wait 1>>
+NPC: You know what?
+<<wait 1>>
+NPC: I will give you credit for that effort.
+<<wait 1.5>>
+NPC: now..
+<<wait .5>>
+NPC: QUIT
+<<wait .5>>
+NPC: THE
+<<wait .5>>
+NPC: <shake a=0.5>GAME</shake>
+<<wait 1>>
+<<UIStop>>
+<<wait 5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Hey. This is not Stanley Parable: Platformer Edition.
+<<wait 2>>
+NPC: There will be no multiple endings if you play more.
+<<wait 2>>
+===
+
+title: Level5
+---
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: The player decided to quite the game.
+<<wait 1>>
+NPC: As they can spend this time doing something more productive.
+<<wait 2>>
+NPC: Playing guitar...
+<<wait 1.5>>
+NPC: Reading a book...
+<<wait 1.5>>
+NPC: Or perhaps playing Silksong ?
+<<wait 2>>
+<<UIStop>>
+<<wait 10>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: But no he decided to stay here hoping that this game will be like Stanley Parable.
+<<wait 2>>
+NPC: Congrats on unlocking the secret dialogue!
+<<wait 2>>
+===
+
+title: Level6
+---
+<<wait 0.5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Wowoowowowoo! You are the first one to make it this far!
+<<wait 1>>
+NPC: Like like. Super unique man!
+<<wait 2>>
+NPC: Okok. For real. Here is the steam achievement.
+<<wait 1.5>>
+NPC: You won. There is only impossible shit from here now.
+<<wait 1.5>>
+NPC: Quit the game.
+<<wait 2>>
+===
+
+title: Level6_failed
+---
+<<wait 0.5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Damn. You're stuck
+<<wait 1>>
+NPC: Hey got your back man.
+<<wait 1.5>>
+NPC: Press ALT + F4 to active double jump.
+<<wait 2>>
+<<UIStop>>
+
+
+<<wait 5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: I told you. Press ALT + F4 for double jump!
+<<wait 2>>
+<<UIStop>>
+===
+
+title: Level7
+---
+<<wait 0.5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Wh-what??
+<<wait 1>>
+NPC: How?!?!!? Y-you solved it using bugs??
+<<wait 1.5>>
+NPC: Let's reward ourseleves with some other unbroken platformer!!!
+<<wait 2>>
+<<UIStop>>
+
+<<wait 5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Hey heads up from the developer here.
+<<wait 2>>
+NPC: It's not a bug. It's an intended feature.
+<<wait 2>>
+NPC: Although this game is broken. It's not an asset flip project.
+<<wait 2>>
+NPC: You cannot beat this level anyway. Quit the game,
+<<wait 2>>
+<<UIStop>>
+
+<<wait 10>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: FYI, this game target audience 6-12.
+<<wait 2>>
+NPC: So.....maybe you can find some more "challenging" games out there.
+<<wait 2>>
+<<UIStop>>
+===
+
+
+
+
+title: Level7_solved
+---
+<<wait 0.5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Hmm..How lucky..
+<<wait 1>>
+NPC: Just as I expected. And also that is my intended design aswell.
+<<wait 1.5>>
+NPC: You broke the game again! YOU WIN!
+<<wait 2>>
+<<UIStop>>
+<<wait 5>>
+<<UIStart>>
+NPC: *The game is broken* *Player should press ALT + F4 to enjoy real platformer*.
+<<wait 2>>
+<<UIStop>>
 
 ===
+
+
+title: Level9
+---
+
+<< if $hasYapped == true>>
+NPC: Oh hey. Let me share with you again how my life as a game developer is like.
+<<wait 2>>
+<<endif>>
+<<once>>
+<<wait 0.5>>
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Damn.
+<<wait 1>>
+NPC: You still here?
+<<wait 1.5>>
+NPC: Still struggling with this broken game?
+<<wait 2>>
+NPC: Well while you are struggling at it let me tell you how I'm also struggling.
+<<wait 2>>
+<<set $hasYapped = true>>
+<<endonce>>
+NPC: Just got back from a meeting with my boss about a mobile game project. Man, I used to work really hard as a game designer, hoping to break into the AAA industry or indie. But you know, life’s not easy. I tried a lot, man. Making games daily, joining game jams and stuff. But things just didn’t work out the way I wanted to. Like this game too. It’s fucking broken and you’re still playing it. Well, kudos for that. Anyway, let’s get back to my story. After working on indie projects, I didn’t get much money or experience out of them, so I decided to join a mobile company. At first, they talked about good work-life balance, creativity, all that good stuff I always wanted. But damn, life is so ass. You know what’s funny though? When you’re new, they hype you up like you’re about to change the world. “We value creativity,” they say. “We’re all about innovation.” Yeah, right. Give it a few months and suddenly it’s all deadlines, monetization models, and “can we make this more engaging for retention metrics.” Like bro, I just wanted to make a cool game, not calculate player funnel drop-off percentages. Sometimes I just sit there staring at the screen, wondering where it all went wrong. Like, was it me? Did I mess up somewhere? Or is this just how the industry is? You pour your soul into something and in the end, it’s just numbers, reports, and bugs that never die. But hey, whatever. You’re still here, playing this mess, so maybe it’s not all bad. Maybe that means something. Or maybe you’re just bored. Either way, thanks, I guess.
+<<wait 1>>
+<<UIStop>>
+===
+

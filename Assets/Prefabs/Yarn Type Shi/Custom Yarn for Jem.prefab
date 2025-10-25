@@ -372,7 +372,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966225513014052465}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61503eb6a998a4af68e0dcbec4aad8cb, type: 3}
   m_Name: 
@@ -444,10 +444,10 @@ MonoBehaviour:
   useFadeEffect: 0
   fadeUpDuration: 0.25
   fadeDownDuration: 0.1
-  autoAdvance: 0
-  autoAdvanceDelay: 1
+  autoAdvance: 1
+  autoAdvanceDelay: 0
   useTypewriterEffect: 1
-  typewriterEffectSpeed: 60
+  typewriterEffectSpeed: 70
   eventHandlers: []
 --- !u!1 &3266701028781280535
 GameObject:
@@ -892,6 +892,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineProvider: {fileID: 0}
+--- !u!1 &7031972777852548969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5147586630994546233}
+  - component: {fileID: 6599624409659757067}
+  m_Layer: 0
+  m_Name: Yarn Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5147586630994546233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031972777852548969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5804668700460594466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6599624409659757067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031972777852548969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce177cf9086a8fe429da61619c5ee4b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7217759439068020174
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,7 +1157,6 @@ MonoBehaviour:
   dialoguePresenters:
   - {fileID: 4662480669412227643}
   - {fileID: 2684661252044397431}
-  - {fileID: 8486790766305104699}
   autoStart: 0
   startNode: Start
   runSelectedOptionAsLine: 0
@@ -1175,6 +1218,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5147586630994546233}
   - {fileID: 3386489013918922760}
   - {fileID: 24088540044881602}
   - {fileID: 910838246790750210}
