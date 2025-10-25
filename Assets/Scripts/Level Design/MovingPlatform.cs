@@ -2,8 +2,10 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : MonoBehaviour, IAffectByCustomTime
 {
+    public float TimeMultiplier { get; set; } = 1f; // 1 = normal speed
+
     [Header("Parameters")]
     public bool enableMovement = true;
     [Space]
@@ -37,15 +39,21 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (enableMovement) MovePlatform();
+        if (!enableMovement) return;
+
+        // Scale physics delta by TimeMultiplier (0 stops, 0.5 is half speed, etc.)
+        float dt = Time.fixedDeltaTime * Mathf.Max(TimeMultiplier, 0f);
+        if (dt <= 0f) return;
+
+        MovePlatform(dt);
     }
 
-    private void MovePlatform()
+    private void MovePlatform(float dt)
     {
-        // Handle pause at endpoints
+        // Handle pause at endpoints (also scaled by TimeMultiplier)
         if (isPaused)
         {
-            pauseTimer -= Time.fixedDeltaTime;
+            pauseTimer -= dt;
             if (pauseTimer <= 0f) isPaused = false;
             return;
         }
@@ -53,7 +61,7 @@ public class MovingPlatform : MonoBehaviour
         float currentTime = movingToB ? timeAToB : timeBToA;
         if (currentTime <= 0f) return;
 
-        float step = (1f / currentTime) * Time.fixedDeltaTime;
+        float step = dt / currentTime;
         progress += movingToB ? step : -step;
 
         if (progress >= 1f)

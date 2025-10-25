@@ -25,11 +25,19 @@ public class PlayerScript : MonoBehaviour
     public CharacterController2D controller;
     [Space]
     public Transform holdAnchor;
+    [Space]
+    public GameManager gameManager;
 
+    void Awake()
+    {
+        if (controller == null) controller = GetComponent<CharacterController2D>();
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
+    }
+    
     void Update()
     {
         TakeInput();
-        UpdatePickedUpItemPosition();
+        if (!gameManager.isPaused) UpdatePickedUpItemPosition();
     }
 
     void FixedUpdate()
@@ -41,13 +49,16 @@ public class PlayerScript : MonoBehaviour
 
     void TakeInput()
     {
+        // Move
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         // crouch = Input.GetKey(KeyCode.LeftControl);
         
+        // Jump
         if (allowMovement && Input.GetButtonDown("Jump")) jumpPressed = true;
         jumpHeld = Input.GetButton("Jump");
         
-        if (Input.GetKeyDown(KeyCode.E))
+        // Pick up / drop item
+        if (Input.GetKeyDown(KeyCode.E) && !gameManager.isPaused)
         {
             if (isHoldingItem)
             { 
@@ -61,7 +72,8 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && isHoldingItem)
+        // Throw item
+        if (Input.GetMouseButtonDown(0) && isHoldingItem && !gameManager.isPaused)
         {
             ThrowHeldItem();
         }

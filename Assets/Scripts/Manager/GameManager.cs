@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     [Header("Pause")]
     public bool isPaused = false;
     [Space]
-    public float timescaleTransitionDuration = 0.1f;
     public float gradientFadeDuration = 0.5f;
+    
+    [Header("Time Manager")]
+    public List<IAffectByCustomTime> timeAffectedObjects = new List<IAffectByCustomTime>();
 
     [Header("References")]
     public Image pauseGradient;
@@ -17,7 +21,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Collect all IAffectByCustomTime instances (including inactive) and avoid duplicates
+        timeAffectedObjects.Clear();
+        var set = new HashSet<IAffectByCustomTime>();
+        foreach (var mb in FindObjectsOfType<MonoBehaviour>(true))
+        {
+            if (mb is IAffectByCustomTime t && t != null)
+                set.Add(t);
+        }
+        timeAffectedObjects.AddRange(set);
         
+        SetCustomTime(1f);
     }
 
     private void Update()
@@ -41,33 +55,14 @@ public class GameManager : MonoBehaviour
 
         if (pause)
         {
-            timescaleTransitionCoroutine = StartCoroutine(TransitionTimescale(0f));
             LerpPauseGradientAlpha(1);
+            SetCustomTime(0f);
         }
         else
         {
-            timescaleTransitionCoroutine = StartCoroutine(TransitionTimescale(1f));
             LerpPauseGradientAlpha(0);
+            SetCustomTime(1f);
         }
-    }
-
-    private IEnumerator TransitionTimescale(float targetTimeScale)
-    {
-        float startTimeScale = Time.timeScale;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < timescaleTransitionDuration)
-        {
-            elapsedTime += Time.unscaledDeltaTime;
-            float t = elapsedTime / timescaleTransitionDuration;
-            Time.timeScale = Mathf.Lerp(startTimeScale, targetTimeScale, t);
-            
-            yield return null;
-        }
-
-        // Ensure we reach the exact target timescale
-        Time.timeScale = targetTimeScale;
-        timescaleTransitionCoroutine = null;
     }
 
     public void LerpPauseGradientAlpha(float targetAlpha)
@@ -96,6 +91,21 @@ public class GameManager : MonoBehaviour
 
         // Ensure we reach the exact target alpha
         pauseGradient.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+    }
+
+    #endregion
+
+    #region Time Manager
+
+    public void SetCustomTime(float multiplier)
+    {
+        foreach (var obj in timeAffectedObjects)
+        {
+            if (obj != null && obj is MonoBehaviour mb && mb.gameObject.activeInHierarchy)
+            {
+                obj.TimeMultiplier = multiplier;
+            }
+        }
     }
 
     #endregion

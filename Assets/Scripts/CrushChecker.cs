@@ -15,10 +15,18 @@ public class CrushChecker : MonoBehaviour
     [Header("Move Parameters")]
     public float minWallDistance = 0.25f;
     public float glitchDuration = 0.2f;
+    
+    [Header("References")]
+    private GameManager gameManager;
 
+    void Awake()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
+    
     private void Update()
     {
-        CheckForCrush();
+        if (!gameManager.isPaused) CheckForCrush();
     }
 
     void CheckForCrush()
