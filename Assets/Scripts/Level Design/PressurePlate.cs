@@ -9,10 +9,13 @@ public class PressurePlate : Activator
     
     [Header("References")]
     public Collider2D triggerArea;
+    
+    public Animator animator;
 
     private void Awake()
     {
         if (triggerArea == null) triggerArea = GetComponent<Collider2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -35,10 +38,21 @@ public class PressurePlate : Activator
         if (objectsOnPlate.Count > 0)
         {
             ActivateReceiver();
+            PlatePressed();
         }
         else
         {
             DeactivateReceiver();
+            PlateStopped();
         }
+    }
+    
+    void PlatePressed()
+    {
+        animator.SetBool("isPressing",true);
+    }
+    void PlateStopped()
+    {
+        animator.SetBool("isPressing",false);
     }
 }
