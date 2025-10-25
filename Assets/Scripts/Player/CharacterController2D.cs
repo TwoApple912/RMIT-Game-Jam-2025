@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,6 +45,7 @@ public class CharacterController2D : MonoBehaviour
 
     public BoolEvent OnCrouchEvent;
     private bool m_wasCrouching = false;
+    public Animator animator;
 
     private void Awake()
     {
@@ -55,6 +57,13 @@ public class CharacterController2D : MonoBehaviour
 
         if (OnCrouchEvent == null)
             OnCrouchEvent = new BoolEvent();
+        
+        animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Update()
+    {
+        animator.SetBool("isGrounded", m_Grounded);
     }
 
     private void FixedUpdate()
@@ -167,6 +176,9 @@ public class CharacterController2D : MonoBehaviour
             m_Rigidbody2D.gravityScale = m_BaseGravityScale;
             m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0f);
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            
+            // Trigger jump animation
+            animator.SetTrigger("jump");
         }
 
         // Apply custom gravity based on state

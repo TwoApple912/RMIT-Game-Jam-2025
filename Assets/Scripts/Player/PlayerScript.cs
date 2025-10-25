@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerScript : MonoBehaviour
 {
-    [Header("Parameters")]
-    public float runSpeed = 40f;
+    [FormerlySerializedAs("runSpeed")] [Header("Parameters")]
+    public float walkSpeed = 40f;
     [Space]
     public float pickedObjectPullStrength = 20f;
     public float throwForce = 12f;
@@ -24,6 +25,8 @@ public class PlayerScript : MonoBehaviour
     [Header("References")]
     public CharacterController2D controller;
     public CapsuleCollider2D collider2D;
+    public Animator animator;
+    public Rigidbody2D rb;
     [Space]
     public Transform holdAnchor;
     [Space]
@@ -33,6 +36,8 @@ public class PlayerScript : MonoBehaviour
     {
         if (controller == null) controller = GetComponent<CharacterController2D>();
         if (collider2D == null) collider2D = GetComponent<CapsuleCollider2D>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
     }
     
@@ -45,6 +50,8 @@ public class PlayerScript : MonoBehaviour
     void FixedUpdate()
     {
         ProcessMovement();
+        
+        animator.SetFloat("verticalVelocity", rb.velocity.y);
     }
     
     #region Input
@@ -52,7 +59,7 @@ public class PlayerScript : MonoBehaviour
     void TakeInput()
     {
         // Move
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
         // crouch = Input.GetKey(KeyCode.LeftControl);
         
         // Jump
@@ -88,6 +95,15 @@ public class PlayerScript : MonoBehaviour
             controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jumpPressed, jumpHeld);
         }
         jumpPressed = false; // consume press
+        
+        if (horizontalMove != 0)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
     }
     
     #endregion
@@ -213,5 +229,10 @@ public class PlayerScript : MonoBehaviour
         }
         
         thrown.transform.position = thrown.transform.position + throwDir * 0.5f;
+    }
+
+    public void Die()
+    {
+        animator.SetBool("died", true);
     }
 }
