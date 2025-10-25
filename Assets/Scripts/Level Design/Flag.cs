@@ -3,7 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class Flag : MonoBehaviour
 {
-    void 
+    [Header("References")]
+    GameManager gameManager;
+    
+    void Awake()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -16,6 +22,6 @@ public class Flag : MonoBehaviour
     void CompleteLevel()
     {
         Debug.Log("Level Completed!");
-        SceneManager.LoadScene();
+        SceneManager.LoadScene(gameManager.nextSceneName);
     }
 }
