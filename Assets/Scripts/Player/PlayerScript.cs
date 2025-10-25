@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
     [Space]
     public float pickedObjectPullStrength = 20f;
     public float throwForce = 12f;
+    // public float colliderEnableDistance = 0.5f; // Distance threshold to re-enable collider
 
     private float horizontalMove = 0f;
     private bool jumpPressed = false;
@@ -21,6 +22,8 @@ public class PlayerScript : MonoBehaviour
     public bool isHoldingItem = false;
     public PickupObject currentHeldItem;
     public List<GameObject> pickupItemsInRange = new List<GameObject>();
+    private int originalItemLayer;
+    private bool isItemAbovePlayer = false;
     
     [Header("References")]
     public CharacterController2D controller;
@@ -67,7 +70,7 @@ public class PlayerScript : MonoBehaviour
         jumpHeld = Input.GetButton("Jump");
         
         // Pick up / drop item
-        if (Input.GetKeyDown(KeyCode.E) && !gameManager.isPaused)
+        if (Input.GetMouseButtonDown(1) && !gameManager.isPaused)
         {
             if (isHoldingItem)
             { 
@@ -139,7 +142,17 @@ public class PlayerScript : MonoBehaviour
                 isHoldingItem = true;
                 currentHeldItem = nearestItem.GetComponent<PickupObject>();
                 
+                // Store original layer
+                originalItemLayer = currentHeldItem.gameObject.layer;
+                isItemAbovePlayer = false;
+                
                 currentHeldItem.PickedUp(gameObject);
+                
+                // // Disable collider when first picked up
+                // if (currentHeldItem.collider != null)
+                // {
+                //     currentHeldItem.collider.isTrigger = true;
+                // }
             }
         }
     }
@@ -148,9 +161,13 @@ public class PlayerScript : MonoBehaviour
     {
         if (currentHeldItem != null)
         {
+            // Restore original layer before dropping
+            currentHeldItem.gameObject.layer = originalItemLayer;
+            
             currentHeldItem.Dropped(gameObject);
             currentHeldItem = null;
             isHoldingItem = false;
+            isItemAbovePlayer = false;
         }
     }
     
@@ -183,6 +200,29 @@ public class PlayerScript : MonoBehaviour
             Vector3 currentPos = currentHeldItem.transform.position;
             Vector3 direction = targetPos - currentPos;
             float distance = direction.magnitude;
+            
+            // Check if item is above the character and change layer accordingly
+            bool itemIsAbove = currentHeldItem.transform.position.y > transform.position.y;
+            
+            if (itemIsAbove && !isItemAbovePlayer)
+            {
+                // Item just moved above player - change layer to default
+                currentHeldItem.gameObject.layer = LayerMask.NameToLayer("Picked Up Object But Overhead");
+                isItemAbovePlayer = true;
+            }
+            else if (!itemIsAbove && isItemAbovePlayer)
+            {
+                // Item moved back below player - restore original layer
+                currentHeldItem.gameObject.layer = originalItemLayer;
+                isItemAbovePlayer = false;
+            }
+            
+            // // Re-enable collider if item is close enough to the hold anchor
+            // if (currentHeldItem.collider != null && currentHeldItem.collider.isTrigger && distance <= colliderEnableDistance)
+            // {
+            //     currentHeldItem.collider.isTrigger = false;
+            // }
+            
             var rb2d = currentHeldItem.GetComponent<Rigidbody2D>();
             if (rb2d != null)
             {
@@ -212,23 +252,27 @@ public class PlayerScript : MonoBehaviour
 
         PickupObject thrown = currentHeldItem;
         
+        // Restore original layer before throwing
+        thrown.gameObject.layer = originalItemLayer;
+        
         thrown.Dropped(gameObject);
         
         currentHeldItem = null;
         isHoldingItem = false;
+        isItemAbovePlayer = false;
         
-        Camera cam = Camera.main;
         Vector3 throwDir = (holdAnchor.position - collider2D.bounds.center).normalized;
         
         var rb2d = thrown.GetComponent<Rigidbody2D>();
         if (rb2d != null)
         {
+            rb2d.velocity *= 0.25f;
             Vector2 force = new Vector2(throwDir.x, throwDir.y) * throwForce;
             rb2d.AddForce(force, ForceMode2D.Impulse);
             return;
         }
         
-        thrown.transform.position = thrown.transform.position + throwDir * 0.5f;
+        thrown.transform.position += throwDir * 0.5f;
     }
 
     public void Die()

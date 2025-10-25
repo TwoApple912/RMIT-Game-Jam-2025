@@ -47,6 +47,8 @@ public class CharacterController2D : MonoBehaviour
     private bool m_wasCrouching = false;
     public Animator animator;
 
+    public Transform hand1;
+
     private void Awake()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -219,5 +221,10 @@ public class CharacterController2D : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+
+        if (hand1 != null)
+        {
+            hand1.localScale = new Vector3(hand1.localScale.x * -1, hand1.localScale.y, hand1.localScale.z);
+        }
     }
 }
