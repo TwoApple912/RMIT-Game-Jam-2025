@@ -78,7 +78,7 @@ public class CharacterController2D : MonoBehaviour
         if (m_Grounded)
             m_CoyoteCounter = m_CoyoteTime;
         else
-            m_CoyoteCounter = Mathf.Max(0f, m_CoyoteCounter - Time.fixedUnscaledTime);
+            m_CoyoteCounter = Mathf.Max(0f, m_CoyoteCounter - Time.fixedDeltaTime);
     }
 
     // Backward-compatible signature
@@ -96,7 +96,7 @@ public class CharacterController2D : MonoBehaviour
         if (jumpPressed)
             m_JumpBufferCounter = m_JumpBufferTime;
         else
-            m_JumpBufferCounter = Mathf.Max(0f, m_JumpBufferCounter - Time.fixedUnscaledTime);
+            m_JumpBufferCounter = Mathf.Max(0f, m_JumpBufferCounter - Time.fixedDeltaTime);
 
         // If crouching, check if the character can stand
         if (!crouch)

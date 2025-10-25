@@ -69,7 +69,10 @@ public class PlayerScript : MonoBehaviour
 
     void ProcessMovement()
     {
-        if (allowMovement) controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jumpPressed, jumpHeld);
+        if (allowMovement)
+        {
+            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jumpPressed, jumpHeld);
+        }
         jumpPressed = false; // consume press
     }
     
