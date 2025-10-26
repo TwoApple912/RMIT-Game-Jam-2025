@@ -13,16 +13,12 @@ title: Level2_Intro
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Wtf? Why is there's one person online here?
-<<wait 2>>
-NPC: Hey. You.
-<<wait 1.5>>
-NPC: <Shake a=0.5> YOU </Shake> there.
-<<wait 2>>
-NPC: <Shake  a=0.5>HOW DID YOU GET HERE?</Shake>
-<<wait 2>>
-NPC: <Shake a-0.5>QUIT THE GAME!</Shake>
-<<wait 2>>
+NPC: What the...?
+<<Wait 2>>
+NPC: I didn't expect anyone to be playing this game.
+<<wait 4>>
+NPC: How did you even find this?
+<<wait 3>>
 <<UIStop>>
 ===
 
@@ -31,51 +27,27 @@ title: Level3
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: <shake a=0.5>WHAT...</Shake>
-<<wait 1>>
-NPC: Still here?
-<<wait 2>>
-NPC: Well. Ok let's see how far you can go.
-<<wait 2>>
+NPC: Hey, notice you didn't answer my question.
+<<wait 4>>
+NPC: Pretty sure I purge this game way back.
+<<wait 4>>
 <<UIStop>>
-<<wait 10>>
-<<UIStart>>
-NPC:
-<<wait 1>>
-NPC: Jumping here...Jumping there...
-<<wait 2>>
-NPC: Man...This is getting boring.
-<<wait 2>>
 ===
 
 title: Level4
 ---
 <<UIStart>>
 NPC:
-<<wait 0.4>>
-NPC: That was close.
 <<wait 1>>
-NPC: You know what?
-<<wait 1>>
-NPC: I will give you credit for that effort.
-<<wait 1.5>>
-NPC: now..
-<<wait .5>>
-NPC: QUIT
-<<wait .5>>
-NPC: THE
-<<wait .5>>
-NPC: <shake a=0.5>GAME</shake>
-<<wait 1>>
+NPC: Y'know you should probably stop wasting your time.
+<<wait 4>>
+NPC: There won't be any rewards for you.
+<<wait 3>>
+NPC: It's just a bunch of rooms I threw together.
+<<wait 4>>
+NPC: Even I know it makes no sense at all.
+<<wait 4>>
 <<UIStop>>
-<<wait 5>>
-<<UIStart>>
-NPC:
-<<wait 1>>
-NPC: Hey. This is not Stanley Parable: Platformer Edition.
-<<wait 2>>
-NPC: There will be no multiple endings if you play more.
-<<wait 2>>
 ===
 
 title: Level5
@@ -83,43 +55,26 @@ title: Level5
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: The player decided to quite the game.
-<<wait 1>>
-NPC: As they can spend this time doing something more productive.
-<<wait 2>>
-NPC: Playing guitar...
-<<wait 1.5>>
-NPC: Reading a book...
-<<wait 1.5>>
-NPC: Or perhaps playing Silksong ?
-<<wait 2>>
+NPC: I don't even like level design that much.
+<<wait 5>>
+NPC: Always thought the idea of 'guiding players' sucks.
+<<wait 4>>
+NPC: They have brains, they should learn to use that sometimes.
+<<wait 6>>
 <<UIStop>>
-<<wait 10>>
-<<UIStart>>
-NPC:
-<<wait 1>>
-NPC: But no he decided to stay here hoping that this game will be like Stanley Parable.
-<<wait 2>>
-NPC: Congrats on unlocking the secret dialogue!
-<<wait 2>>
 ===
 
 title: Level6
 ---
-<<wait 0.5>>
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Wowoowowowoo! You are the first one to make it this far!
-<<wait 1>>
-NPC: Like like. Super unique man!
-<<wait 2>>
-NPC: Okok. For real. Here is the steam achievement.
-<<wait 1.5>>
-NPC: You won. There is only impossible shit from here now.
-<<wait 1.5>>
-NPC: Quit the game.
-<<wait 2>>
+NPC: Because of that, I made this level...
+<<wait 4>>
+NPC: ...to specifically punish those who play it.
+<<wait 5>>
+NPC: These levels are unbeatable, highly recommend you quit now.
+<<wait 6>>
 ===
 
 title: Level6_failed
@@ -128,12 +83,12 @@ title: Level6_failed
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Damn. You're stuck
-<<wait 1>>
-NPC: Hey got your back man.
-<<wait 1.5>>
-NPC: Press ALT + F4 to active double jump.
+NPC: See, what did I tell you?
 <<wait 2>>
+NPC: Get out of the game and do something meaningful to your life.
+<<wait 6>>
+NPC: Maybe by touching some grass, heard those are good.
+<<wait 5>>
 <<UIStop>>
 
 
@@ -141,10 +96,38 @@ NPC: Press ALT + F4 to active double jump.
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: I told you. Press ALT + F4 for double jump!
-<<wait 2>>
+NPC: And Vitamin too, those are good, highly recommend.
+<<wait 5>>
 <<UIStop>>
 ===
+
+title: Level6a
+---
+<<UIStart>>
+NPC:
+<<wait 1>>
+NPC: Wait, <shake a=0.5>WHAT?!</shake>
+<<wait 1>>
+NPC: How did you...???
+<<wait 1>>
+NPC: WHAT?!?!?!?!
+<<wait 1>>
+<<UIStop>>
+===
+
+title: Level7fake
+---
+NPC:
+<<wait 1>>
+NPC: No, no, no, no, no, no.
+<<wait 1>>
+NPC: Wait a minute...
+<<wait 2>>
+NPC: Wait a <shake a=0.5>f...!</shake>
+<<wait 2>>
+NPC: <shake a=0.5>You cheated! This is all this is!</shake>
+<<wait 4>>
+<<UIStop>>
 
 title: Level7
 ---
@@ -152,41 +135,35 @@ title: Level7
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Wh-what??
-<<wait 1>>
-NPC: How?!?!!? Y-you solved it using bugs??
-<<wait 1.5>>
-NPC: Let's reward ourseleves with some other unbroken platformer!!!
+NPC: That was weird
 <<wait 2>>
+NPC: Normally you would only see bug in speed-runs and shi...
+<<wait 5>>
+NPC: Let's make sure you don't solve the level this time.
+<<wait 4>>
 <<UIStop>>
 
 <<wait 5>>
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Hey heads up from the developer here.
-<<wait 2>>
-NPC: It's not a bug. It's an intended feature.
-<<wait 2>>
-NPC: Although this game is broken. It's not an asset flip project.
-<<wait 2>>
-NPC: You cannot beat this level anyway. Quit the game,
-<<wait 2>>
+NPC: Don't think you've won with that cheap trick of yours
+<<wait 5>>
+NPC: Let's see you use that box to get to <shake a=0.5>BELOW</shake> the level this time.
+<<wait 7>>
 <<UIStop>>
 
-<<wait 10>>
-<<UIStart>>
+title: Level7_pushed
+---
 NPC:
 <<wait 1>>
-NPC: FYI, this game target audience 6-12.
+NPC: Yeah screw you.
 <<wait 2>>
-NPC: So.....maybe you can find some more "challenging" games out there.
+NPC: Oh I'm sorry I didn't realize you're here for that.
+<<wait 5>>
+NPC: (No, I'm not)
 <<wait 2>>
 <<UIStop>>
-===
-
-
-
 
 title: Level7_solved
 ---
@@ -194,19 +171,10 @@ title: Level7_solved
 <<UIStart>>
 NPC:
 <<wait 1>>
-NPC: Hmm..How lucky..
-<<wait 1>>
-NPC: Just as I expected. And also that is my intended design aswell.
-<<wait 1.5>>
-NPC: You broke the game again! YOU WIN!
-<<wait 2>>
+NPC: What the f... <shake a=0.5>ANOTHER ONE?!</shake>
+<<wait 3>>
+NPC: That was <shake a=0.5>NOT</shake> what I had in mind when I placed that there.
 <<UIStop>>
-<<wait 5>>
-<<UIStart>>
-NPC: *The game is broken* *Player should press ALT + F4 to enjoy real platformer*.
-<<wait 2>>
-<<UIStop>>
-
 ===
 
 

@@ -18,6 +18,8 @@ public class CrushChecker : MonoBehaviour
     
     [Header("References")]
     private GameManager gameManager;
+    
+    private bool isGlitching = false;
 
     void Awake()
     {
@@ -31,25 +33,37 @@ public class CrushChecker : MonoBehaviour
 
     void CheckForCrush()
     {
+        // Don't check for new crush positions if already glitching to a safe position
+        if (isGlitching) return;
+        
         // Visualize raycasts with Debug.DrawRay (persists for duration)
         Debug.DrawRay(transform.position, Vector2.left * raycastDistance, Color.red, 0.5f);
         Debug.DrawRay(transform.position, Vector2.right * raycastDistance, Color.red, 0.5f);
         Debug.DrawRay(transform.position, Vector2.up * raycastDistance, Color.red, 0.5f);
         Debug.DrawRay(transform.position, Vector2.down * raycastDistance, Color.red, 0.5f);
 
-        bool leftHit = Physics2D.Raycast(transform.position, Vector2.left, raycastDistance, crushableLayers);
-        bool rightHit = Physics2D.Raycast(transform.position, Vector2.right, raycastDistance, crushableLayers);
-        if (leftHit && rightHit)
+        RaycastHit2D leftHit = Physics2D.Raycast(transform.position, Vector2.left, raycastDistance, crushableLayers);
+        RaycastHit2D rightHit = Physics2D.Raycast(transform.position, Vector2.right, raycastDistance, crushableLayers);
+        if (leftHit.collider != null && rightHit.collider != null)
         {
-            TryGlitchToSafePosition(Vector2.left, Vector2.right);
-            return;
+            // If both rays hit the same collider, don't attempt to glitch
+            if (leftHit.collider != rightHit.collider)
+            {
+                TryGlitchToSafePosition(Vector2.left, Vector2.right);
+                return;
+            }
         }
 
-        bool upHit = Physics2D.Raycast(transform.position, Vector2.up, raycastDistance, crushableLayers);
-        bool downHit = Physics2D.Raycast(transform.position, Vector2.down, raycastDistance, crushableLayers);
-        if (upHit && downHit)
+        RaycastHit2D upHit = Physics2D.Raycast(transform.position, Vector2.up, raycastDistance, crushableLayers);
+        RaycastHit2D downHit = Physics2D.Raycast(transform.position, Vector2.down, raycastDistance, crushableLayers);
+        if (upHit.collider != null && downHit.collider != null)
         {
-            TryGlitchToSafePosition(Vector2.up, Vector2.down);
+            // If both rays hit the same collider, don't attempt to glitch
+            if (upHit.collider != downHit.collider)
+            {
+                TryGlitchToSafePosition(Vector2.up, Vector2.down);
+                return;
+            }
         }
     }
 
@@ -63,12 +77,18 @@ public class CrushChecker : MonoBehaviour
     
     IEnumerator WaitAndGlitch(Vector2 targetPosition, Vector2 direction1, Vector2 direction2)
     {
+        isGlitching = true;
+        
         while (true)
         {
             RaycastHit2D hit1 = Physics2D.Raycast(transform.position, direction1, raycastDistance, crushableLayers);
             RaycastHit2D hit2 = Physics2D.Raycast(transform.position, direction2, raycastDistance, crushableLayers);
             
-            if (!hit1.collider || !hit2.collider) yield break;
+            if (!hit1.collider || !hit2.collider)
+            {
+                isGlitching = false;
+                yield break;
+            }
             
             float wallDistance = hit1.distance + hit2.distance;
             if (wallDistance <= minWallDistance) break;
@@ -88,6 +108,7 @@ public class CrushChecker : MonoBehaviour
         }
 
         transform.position = targetPosition;
+        isGlitching = false;
         Debug.Log("Glitched to safe position!");
     }
     
