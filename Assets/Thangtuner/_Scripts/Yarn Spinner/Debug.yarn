@@ -14,7 +14,7 @@ title: Level2_Intro
 NPC:
 <<wait 1>>
 NPC: What the...?
-<<Wait 2>>
+<<wait 2>>
 NPC: I didn't expect anyone to be playing this game.
 <<wait 4>>
 NPC: How did you even find this?
@@ -117,6 +117,7 @@ NPC: WHAT?!?!?!?!
 
 title: Level7fake
 ---
+<<UIStart>>
 NPC:
 <<wait 1>>
 NPC: No, no, no, no, no, no.
@@ -128,6 +129,7 @@ NPC: Wait a <shake a=0.5>f...!</shake>
 NPC: <shake a=0.5>You cheated! This is all this is!</shake>
 <<wait 4>>
 <<UIStop>>
+===
 
 title: Level7
 ---
@@ -174,6 +176,7 @@ NPC:
 NPC: What the f... <shake a=0.5>ANOTHER ONE?!</shake>
 <<wait 3>>
 NPC: That was <shake a=0.5>NOT</shake> what I had in mind when I placed that there.
+<<wait 1>>
 <<UIStop>>
 ===
 
