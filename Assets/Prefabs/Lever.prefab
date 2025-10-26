@@ -65,7 +65,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.45275348}
+  m_Offset: {x: 0.11731899, y: 0.45275348}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -76,7 +76,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.905507}
+  m_Size: {x: 0.3425901, y: 1.905507}
   m_EdgeRadius: 0
 --- !u!114 &8422353581616680496
 MonoBehaviour:
@@ -157,7 +157,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.45275348}
+  m_Offset: {x: -0.10338724, y: 0.45275348}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -168,7 +168,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.905507}
+  m_Size: {x: 0.32430434, y: 1.905507}
   m_EdgeRadius: 0
 --- !u!114 &1244347983632692453
 MonoBehaviour:
@@ -321,10 +321,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activateeToOpen:
   - {fileID: 0}
-  - {fileID: 0}
   oneTimeActivation: 1
   objectsOnPlate: []
   triggerArea: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &2754261620423191481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,7 +422,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0023260117, y: 0.49546802}
+  m_Offset: {x: 0.0023682415, y: 0.49546802}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -433,7 +433,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.66038704, y: 1.8141491}
+  m_Size: {x: 0.6603026, y: 1.8141491}
   m_EdgeRadius: 0
 --- !u!95 &2500535060197287656
 Animator:
