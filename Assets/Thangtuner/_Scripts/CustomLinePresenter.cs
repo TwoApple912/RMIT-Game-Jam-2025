@@ -36,6 +36,7 @@ namespace Yarn.Unity
         [MustNotBeNull]
         public CanvasGroup? canvasGroup;
         public static event Action OnLineDisplayed;
+        public static event Action OnLineEnded; // ✅ new event
 
         /// <summary>
         /// The <see cref="TMP_Text"/> object that displays the text of
@@ -319,6 +320,7 @@ namespace Yarn.Unity
                 // fading up the UI
                 if (useFadeEffect)
                 {
+                    OnLineEnded?.Invoke();
                     await Effects.FadeAlphaAsync(canvasGroup, 0, 1, fadeDownDuration, token.HurryUpToken);
                 }
                 else

@@ -570,6 +570,20 @@ MonoBehaviour:
   shownScale: {x: 1, y: 1, z: 1}
   hiddenScale: {x: 0, y: 0, z: 0}
   startHidden: 1
+  showSound:
+    Guid:
+      Data1: -1433778161
+      Data2: 1275233582
+      Data3: -1463196027
+      Data4: 1809529350
+    Path: event:/WindowPopIn
+  hideSound:
+    Guid:
+      Data1: 1438143875
+      Data2: 1132613938
+      Data3: -567758960
+      Data4: -323968177
+    Path: event:/WindowPopBack
 --- !u!114 &6492763873852183901
 MonoBehaviour:
   m_ObjectHideFlags: 0

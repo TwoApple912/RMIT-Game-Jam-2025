@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using DG.Tweening;
 using Yarn.Unity;
+using FMODUnity; // ✅ For EventReference
+using FMOD.Studio; // ✅ For EventInstance
 
 public class UIPopupTween : MonoBehaviour
 {
@@ -17,6 +19,12 @@ public class UIPopupTween : MonoBehaviour
     private RectTransform rectTransform;
     private Tween currentTween;
 
+    [Header("FMOD Sounds")]
+    [SerializeField] private EventReference showSound;
+    [SerializeField] private EventReference hideSound;
+
+    private EventInstance currentEvent;
+
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -30,6 +38,7 @@ public class UIPopupTween : MonoBehaviour
         YarnGameManager.OnPopDialogueUI += PopIn;
         YarnGameManager.OnStopDialogueUI += PopOut;
     }
+
     private void OnDisable()
     {
         YarnGameManager.OnPopDialogueUI -= PopIn;
@@ -41,6 +50,7 @@ public class UIPopupTween : MonoBehaviour
     /// </summary>
     public void PopIn()
     {
+        PlaySound(showSound); // ✅ Play FMOD sound when showing
         StartTween(shownScale);
     }
 
@@ -49,6 +59,7 @@ public class UIPopupTween : MonoBehaviour
     /// </summary>
     public void PopOut()
     {
+        PlaySound(hideSound); // ✅ Play FMOD sound when hiding
         StartTween(hiddenScale);
     }
 
@@ -60,5 +71,23 @@ public class UIPopupTween : MonoBehaviour
         // Start the tween
         currentTween = rectTransform.DOScale(targetScale, duration)
             .SetEase(easeType);
+    }
+
+    private void PlaySound(EventReference soundEvent)
+    {
+        // Stop any current event to prevent overlap
+        if (currentEvent.isValid())
+        {
+            currentEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            currentEvent.release();
+        }
+
+        if (!soundEvent.IsNull)
+        {
+            currentEvent = RuntimeManager.CreateInstance(soundEvent);
+            currentEvent.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            currentEvent.start();
+            currentEvent.release();
+        }
     }
 }

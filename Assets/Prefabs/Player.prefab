@@ -629,6 +629,20 @@ MonoBehaviour:
   rb: {fileID: 0}
   holdAnchor: {fileID: 4757711437359454712}
   gameManager: {fileID: 0}
+  pickupSound:
+    Guid:
+      Data1: -174233361
+      Data2: 1249448889
+      Data3: 836814754
+      Data4: 474707292
+    Path: event:/PickUp
+  throwSound:
+    Guid:
+      Data1: -427529980
+      Data2: 1086236088
+      Data3: -360680780
+      Data4: -603530136
+    Path: event:/Throw
 --- !u!114 &7066926002482489303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +678,20 @@ MonoBehaviour:
       m_Calls: []
   animator: {fileID: 0}
   hand1: {fileID: 0}
+  jumpSoundEvent:
+    Guid:
+      Data1: 1763284501
+      Data2: 1333607732
+      Data3: -352004211
+      Data4: 39788255
+    Path: event:/Jump
+  landSoundEvent:
+    Guid:
+      Data1: 1901214063
+      Data2: 1083770680
+      Data3: 582603159
+      Data4: -697479233
+    Path: event:/Landing
 --- !u!114 &1293203119101712928
 MonoBehaviour:
   m_ObjectHideFlags: 0

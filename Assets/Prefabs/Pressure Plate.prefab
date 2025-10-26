@@ -139,6 +139,20 @@ MonoBehaviour:
   objectsOnPlate: []
   triggerArea: {fileID: 0}
   animator: {fileID: 0}
+  pressSound:
+    Guid:
+      Data1: 1936466292
+      Data2: 1199982364
+      Data3: 310720154
+      Data4: 827257422
+    Path: event:/Plate press
+  releaseSound:
+    Guid:
+      Data1: -459643958
+      Data2: 1219696025
+      Data3: 100040584
+      Data4: 353801502
+    Path: event:/Plate relase
 --- !u!212 &5934372105271399676
 SpriteRenderer:
   m_ObjectHideFlags: 0

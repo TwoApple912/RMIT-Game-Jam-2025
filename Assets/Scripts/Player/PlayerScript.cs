@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using FMODUnity; // ✅ For EventReference
+using FMOD.Studio; // ✅ For EventInstance
 
 public class PlayerScript : MonoBehaviour
 {
@@ -13,13 +14,12 @@ public class PlayerScript : MonoBehaviour
     [Space]
     public float pickedObjectPullStrength = 20f;
     public float throwForce = 12f;
-    // public float colliderEnableDistance = 0.5f; // Distance threshold to re-enable collider
 
     private float horizontalMove = 0f;
     private bool jumpPressed = false;
     private bool jumpHeld = false;
     private bool crouch = false;
-    
+
     [Header("Tracker")]
     public bool allowMovement = true;
     [Space]
@@ -28,7 +28,7 @@ public class PlayerScript : MonoBehaviour
     public List<GameObject> pickupItemsInRange = new List<GameObject>();
     private int originalItemLayer;
     private bool isItemAbovePlayer = false;
-    
+
     [Header("References")]
     public CharacterController2D controller;
     public CapsuleCollider2D collider2D;
@@ -39,6 +39,12 @@ public class PlayerScript : MonoBehaviour
     [Space]
     public GameManager gameManager;
 
+    [Header("FMOD Sounds")]
+    public EventReference pickupSound;
+    public EventReference throwSound;
+
+    private EventInstance currentEvent;
+
     void Awake()
     {
         if (controller == null) controller = GetComponent<CharacterController2D>();
@@ -47,7 +53,7 @@ public class PlayerScript : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
     }
-    
+
     void Update()
     {
         TakeInput();
@@ -57,29 +63,27 @@ public class PlayerScript : MonoBehaviour
     void FixedUpdate()
     {
         ProcessMovement();
-        
         animator.SetFloat("verticalVelocity", rb.velocity.y);
     }
-    
+
     #region Input
 
     void TakeInput()
     {
         if (!allowInput) return;
-        
+
         // Move
         horizontalMove = Input.GetAxisRaw("Horizontal") * walkSpeed;
-        // crouch = Input.GetKey(KeyCode.LeftControl);
-        
+
         // Jump
         if (allowMovement && Input.GetButtonDown("Jump")) jumpPressed = true;
         jumpHeld = Input.GetButton("Jump");
-        
+
         // Pick up / drop item
         if (Input.GetMouseButtonDown(1) && !gameManager.isPaused)
         {
             if (isHoldingItem)
-            { 
+            {
                 DropHeldItem();
                 Debug.Log("dropped");
             }
@@ -103,62 +107,49 @@ public class PlayerScript : MonoBehaviour
         {
             controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jumpPressed, jumpHeld);
         }
-        jumpPressed = false; // consume press
-        
-        if (horizontalMove != 0)
-        {
-            animator.SetBool("isWalking", true);
-        }
-        else
-        {
-            animator.SetBool("isWalking", false);
-        }
+        jumpPressed = false;
+
+        animator.SetBool("isWalking", horizontalMove != 0);
     }
-    
+
     #endregion
-    
+
     #region Pick up
-    
+
     public void UpdatePickupItemsInRangeList(GameObject item, bool isEntering)
     {
         if (isEntering)
         {
             if (!pickupItemsInRange.Contains(item))
-            {
                 pickupItemsInRange.Add(item);
-            }
         }
         else
         {
             if (pickupItemsInRange.Contains(item))
-            {
                 pickupItemsInRange.Remove(item);
-            }
         }
     }
-    
+
     void PickUpNearestItem()
     {
         GameObject nearestItem = ChooseNearestItem();
         Debug.Log(nearestItem);
+
         if (nearestItem != null)
-        { 
+        {
             if (nearestItem.GetComponent<PickupObject>() != null)
             {
                 isHoldingItem = true;
                 currentHeldItem = nearestItem.GetComponent<PickupObject>();
-                
+
                 // Store original layer
                 originalItemLayer = currentHeldItem.gameObject.layer;
                 isItemAbovePlayer = false;
-                
+
                 currentHeldItem.PickedUp(gameObject);
-                
-                // // Disable collider when first picked up
-                // if (currentHeldItem.collider != null)
-                // {
-                //     currentHeldItem.collider.isTrigger = true;
-                // }
+
+                // ✅ Play pickup sound
+                PlaySound(pickupSound);
             }
         }
     }
@@ -169,14 +160,14 @@ public class PlayerScript : MonoBehaviour
         {
             // Restore original layer before dropping
             currentHeldItem.gameObject.layer = originalItemLayer;
-            
+
             currentHeldItem.Dropped(gameObject);
             currentHeldItem = null;
             isHoldingItem = false;
             isItemAbovePlayer = false;
         }
     }
-    
+
     GameObject ChooseNearestItem()
     {
         if (pickupItemsInRange.Count == 0) return null;
@@ -206,29 +197,21 @@ public class PlayerScript : MonoBehaviour
             Vector3 currentPos = currentHeldItem.transform.position;
             Vector3 direction = targetPos - currentPos;
             float distance = direction.magnitude;
-            
+
             // Check if item is above the character and change layer accordingly
             bool itemIsAbove = currentHeldItem.transform.position.y > transform.position.y;
-            
+
             if (itemIsAbove && !isItemAbovePlayer)
             {
-                // Item just moved above player - change layer to default
                 currentHeldItem.gameObject.layer = LayerMask.NameToLayer("Picked Up Object But Overhead");
                 isItemAbovePlayer = true;
             }
             else if (!itemIsAbove && isItemAbovePlayer)
             {
-                // Item moved back below player - restore original layer
                 currentHeldItem.gameObject.layer = originalItemLayer;
                 isItemAbovePlayer = false;
             }
-            
-            // // Re-enable collider if item is close enough to the hold anchor
-            // if (currentHeldItem.collider != null && currentHeldItem.collider.isTrigger && distance <= colliderEnableDistance)
-            // {
-            //     currentHeldItem.collider.isTrigger = false;
-            // }
-            
+
             var rb2d = currentHeldItem.GetComponent<Rigidbody2D>();
             if (rb2d != null)
             {
@@ -257,28 +240,28 @@ public class PlayerScript : MonoBehaviour
         if (currentHeldItem == null) return;
 
         PickupObject thrown = currentHeldItem;
-        
+
         // Restore original layer before throwing
         thrown.gameObject.layer = originalItemLayer;
-        
+
         thrown.Dropped(gameObject);
-        
+
         currentHeldItem = null;
         isHoldingItem = false;
         isItemAbovePlayer = false;
-        
+
         Vector3 throwDir = (holdAnchor.position - collider2D.bounds.center).normalized;
-        
+
         var rb2d = thrown.GetComponent<Rigidbody2D>();
         if (rb2d != null)
         {
             rb2d.velocity *= 0.25f;
             Vector2 force = new Vector2(throwDir.x, throwDir.y) * throwForce;
             rb2d.AddForce(force, ForceMode2D.Impulse);
-            return;
         }
-        
-        thrown.transform.position += throwDir * 0.5f;
+
+        // ✅ Play throw sound
+        PlaySound(throwSound);
     }
 
     public void Die()
@@ -287,16 +270,34 @@ public class PlayerScript : MonoBehaviour
         horizontalMove = 0f;
         rb.velocity = Vector2.zero;
         DropHeldItem();
-        
+
         animator.SetTrigger("dieTrigger");
         animator.SetBool("died", true);
 
         StartCoroutine(DeadthCoroutine());
     }
-    
+
     IEnumerator DeadthCoroutine()
     {
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void PlaySound(EventReference soundEvent)
+    {
+        // Stop any currently playing FMOD event
+        if (currentEvent.isValid())
+        {
+            currentEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            currentEvent.release();
+        }
+
+        if (!soundEvent.IsNull)
+        {
+            currentEvent = RuntimeManager.CreateInstance(soundEvent);
+            currentEvent.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            currentEvent.start();
+            currentEvent.release();
+        }
     }
 }
