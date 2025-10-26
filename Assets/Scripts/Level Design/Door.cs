@@ -1,9 +1,11 @@
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
 public class Door : Receiver, IAffectByCustomTime
 {
     public float TimeMultiplier { get; set; } = 1;
-    
+
     [Header("Parameters")]
     public Vector3 closedPosition;
     public Vector3 closedRotation;
@@ -19,7 +21,14 @@ public class Door : Receiver, IAffectByCustomTime
     private Vector3 startPosition;
     private Vector3 startRotation;
 
-    [Header("References")] public Rigidbody2D rb;
+    [Header("References")] 
+    public Rigidbody2D rb;
+
+    [Header("FMOD Sounds")]
+    public EventReference openSound;
+    public EventReference closeSound;
+
+    private EventInstance currentEvent; // tracks current FMOD sound
 
     private void Awake()
     {
@@ -58,12 +67,14 @@ public class Door : Receiver, IAffectByCustomTime
     public override void Activated()
     {
         base.Activated();
+        PlaySound(openSound); // ✅ Play open FMOD sound
         StartMovement(openPosition, openRotation);
     }
 
     public override void Deactivated()
     {
         base.Deactivated();
+        PlaySound(closeSound); // ✅ Play close FMOD sound
         StartMovement(closedPosition, closedRotation);
     }
 
@@ -75,5 +86,23 @@ public class Door : Receiver, IAffectByCustomTime
         targetRotation = targetRot;
         moveProgress = 0f;
         isMoving = true;
+    }
+
+    private void PlaySound(EventReference soundEvent)
+    {
+        // Stop any currently playing sound before starting a new one
+        if (currentEvent.isValid())
+        {
+            currentEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            currentEvent.release();
+        }
+
+        if (!soundEvent.IsNull)
+        {
+            currentEvent = RuntimeManager.CreateInstance(soundEvent);
+            currentEvent.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            currentEvent.start();
+            currentEvent.release(); // release after playback to free FMOD memory
+        }
     }
 }

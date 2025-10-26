@@ -402,6 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 24088540044881602}
   - component: {fileID: 4662480669412227643}
+  - component: {fileID: 3972397808100944340}
   m_Layer: 0
   m_Name: Custom Line Presenter
   m_TagString: Untagged
@@ -449,6 +450,27 @@ MonoBehaviour:
   useTypewriterEffect: 1
   typewriterEffectSpeed: 70
   eventHandlers: []
+--- !u!114 &3972397808100944340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3243917751568356225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94a31d864d5dde047b3d0811e99446b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typewriterBlips:
+  - Guid:
+      Data1: -464039599
+      Data2: 1087303158
+      Data3: 1641681335
+      Data4: -2005103270
+    Path: event:/Dia_SFX 3
+  blipInterval: 5
+  stopOnLineEnd: 1
 --- !u!1 &3266701028781280535
 GameObject:
   m_ObjectHideFlags: 0

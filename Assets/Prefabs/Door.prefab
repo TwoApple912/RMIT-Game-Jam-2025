@@ -79,6 +79,20 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rb: {fileID: 0}
+  openSound:
+    Guid:
+      Data1: 1138063364
+      Data2: 1099174670
+      Data3: -1137308236
+      Data4: -1230304565
+    Path: event:/DoorUp
+  closeSound:
+    Guid:
+      Data1: -1039781935
+      Data2: 1189283082
+      Data3: 783534245
+      Data4: 1197849541
+    Path: event:/DoorDown
 --- !u!212 &54869787274838878
 SpriteRenderer:
   m_ObjectHideFlags: 0
