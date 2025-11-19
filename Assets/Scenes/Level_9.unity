@@ -628,6 +628,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7191021591914148296, guid: 7d500f76cc34b0d4fb846f3b259137c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2112009254}
+    - target: {fileID: 7191021591914148296, guid: 7d500f76cc34b0d4fb846f3b259137c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RestartLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8120093297958200387, guid: 7d500f76cc34b0d4fb846f3b259137c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8120093297958200387, guid: 7d500f76cc34b0d4fb846f3b259137c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2112009254}
+    - target: {fileID: 8120093297958200387, guid: 7d500f76cc34b0d4fb846f3b259137c2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Resume
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4861,11 +4881,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3520291763707757600, guid: 232d69670fe16414dabbddeeaa32c78d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6399997
+      value: 0.6399999
       objectReference: {fileID: 0}
     - target: {fileID: 3520291763707757600, guid: 232d69670fe16414dabbddeeaa32c78d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.1999989
+      value: -2.1999998
       objectReference: {fileID: 0}
     - target: {fileID: 3520291763707757600, guid: 232d69670fe16414dabbddeeaa32c78d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5116,7 +5136,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ce3014bd9671f7b4ebbbdd260a9247d6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5141,6 +5161,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2112009254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2825164340882607941, guid: 5c7ea36339ef27943b1a897cada3f4ab, type: 3}
+  m_PrefabInstance: {fileID: 1894446427}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3def76d242d8c194284b8f3d60c4a3f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
